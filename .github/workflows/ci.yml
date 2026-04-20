@@ -27,15 +27,15 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: false
-      - uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           cache-dependency-glob: ".github/workflows/*.yml"
           cache-suffix: pre-commit-uv
       - run: uv tool install pre-commit --with pre-commit-uv --force-reinstall
-      - uses: actions/cache@v5
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-uv-v1-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -67,15 +67,15 @@ jobs:
       BABEL_CLDR_QUIET: "1"
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       with:
         persist-credentials: false
-    - uses: actions/cache@v5
+    - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
       with:
         path: cldr
         key: cldr-${{ hashFiles('scripts/*cldr*') }}
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
       with:
         python-version: ${{ matrix.python-version }}
         allow-prereleases: true
@@ -90,7 +90,7 @@ jobs:
       env:
         COVERAGE_XML_PATH: ${{ runner.temp }}
         BABEL_TOX_EXTRA_DEPS: pytest-github-actions-annotate-failures
-    - uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+    - uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
       with:
         directory: ${{ runner.temp }}
         flags: ${{ matrix.os }}-${{ matrix.python-version }}
@@ -103,10 +103,10 @@ jobs:
     runs-on: ubuntu-24.04
     needs: lint
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
           python-version: "3.14"
           cache: "pip"
@@ -114,7 +114,7 @@ jobs:
       - run: pip install build -e .
       - run: make import-cldr
       - run: python -m build
-      - uses: actions/upload-artifact@v6
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dist
           path: dist
@@ -130,12 +130,12 @@ jobs:
     permissions:
       id-token: write # Required for Trusted Publishing action
     steps:
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: dist
           path: dist/
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           verbose: true
           print-hash: true
